@@ -1,0 +1,2 @@
+Ссылка подсказка, как выполнять ДЗ:
+https://web.archive.org/web/20230601150535/https://dzone.com/articles/logstash-elasticsearch-and

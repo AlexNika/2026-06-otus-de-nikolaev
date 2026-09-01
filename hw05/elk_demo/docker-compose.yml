@@ -1,0 +1,25 @@
+services:
+  elasticsearch:
+    image: elasticsearch:7.14.1
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    networks:
+      - elastic
+
+  kibana:
+    image: kibana:7.14.1
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge

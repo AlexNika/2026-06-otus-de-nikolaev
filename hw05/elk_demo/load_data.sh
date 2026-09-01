@@ -1,0 +1,3 @@
+#!/bin/bash
+export MSYS_NO_PATHCONV=1
+docker run --rm --name elk_demo_logstash --net elk_demo_elastic -v "$(pwd)/logstash":/app -it logstash:7.14.1 logstash -f /app/clickstream.conf
