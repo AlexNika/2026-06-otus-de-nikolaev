@@ -1,0 +1,73 @@
+2026-09-27 16:22:01.978 [INFO ] [run-all] === run-all started (PID 21700, PowerShell 7.6.6) ===
+2026-09-27 16:22:01.989 [INFO ] [run-all] Parameters: Topic=test; Count=5; RunId=20260927162201; MaxMessages=0; TimeoutMs=15000; ContainerName=broker; BootstrapServer=localhost:29092; KafkaBin=/opt/kafka/bin; LogFile=
+2026-09-27 16:22:01.990 [INFO ] [run-all] Log file: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:02.007 [INFO ] [run-all] Shell executable: C:\Program Files\PowerShell\7\pwsh.exe
+2026-09-27 16:22:02.010 [INFO ] [run-all] Shared RunId: 20260927162201; shared log: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:02.015 [STEP ] [run-all] === Step 01-create-topic ===
+2026-09-27 16:22:02.685 [INFO ] [01-create-topic] === 01-create-topic started (PID 24184, PowerShell 7.6.6) ===
+2026-09-27 16:22:02.701 [INFO ] [01-create-topic] Parameters: Topic=test; Partitions=3; ReplicationFactor=1; ContainerName=broker; BootstrapServer=localhost:29092; KafkaBin=/opt/kafka/bin; LogFile=D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:02.702 [INFO ] [01-create-topic] Log file: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:02.990 [INFO ] [01-create-topic] Container 'broker' is running and healthy
+2026-09-27 16:22:03.164 [INFO ] [01-create-topic] Kafka CLI directory: /opt/kafka/bin
+2026-09-27 16:22:03.183 [STEP ] [01-create-topic] docker exec broker /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:29092 --list
+2026-09-27 16:22:05.251 [INFO ] [01-create-topic] __consumer_offsets
+2026-09-27 16:22:05.253 [INFO ] [01-create-topic] foo
+2026-09-27 16:22:05.254 [INFO ] [01-create-topic] test
+2026-09-27 16:22:05.256 [INFO ] [01-create-topic] test-topic
+2026-09-27 16:22:05.264 [WARN ] [01-create-topic] Topic 'test' already exists, skipping creation
+2026-09-27 16:22:05.267 [STEP ] [01-create-topic] docker exec broker /opt/kafka/bin/kafka-topics.sh --describe --topic test --bootstrap-server localhost:29092
+2026-09-27 16:22:07.432 [INFO ] [01-create-topic] Topic: test	TopicId: FXimJNBET2GoCD-4hxfDpw	PartitionCount: 3	ReplicationFactor: 1	Configs: min.insync.replicas=1
+2026-09-27 16:22:07.450 [INFO ] [01-create-topic] 	Topic: test	Partition: 0	Leader: 1	Replicas: 1	Isr: 1	Elr: 	LastKnownElr: 
+2026-09-27 16:22:07.452 [INFO ] [01-create-topic] 	Topic: test	Partition: 1	Leader: 1	Replicas: 1	Isr: 1	Elr: 	LastKnownElr: 
+2026-09-27 16:22:07.454 [INFO ] [01-create-topic] 	Topic: test	Partition: 2	Leader: 1	Replicas: 1	Isr: 1	Elr: 	LastKnownElr: 
+2026-09-27 16:22:07.456 [INFO ] [01-create-topic] DONE: topic step completed successfully
+2026-09-27 16:22:07.822 [INFO ] [run-all] Step '01-create-topic' finished with exit code 0
+2026-09-27 16:22:07.823 [STEP ] [run-all] === Step 02-produce-messages ===
+2026-09-27 16:22:08.537 [INFO ] [02-produce-messages] === 02-produce-messages started (PID 17688, PowerShell 7.6.6) ===
+2026-09-27 16:22:08.549 [INFO ] [02-produce-messages] Parameters: Topic=test; Count=5; RunId=20260927162201; Messages=0 custom; ContainerName=broker; BootstrapServer=localhost:29092; KafkaBin=/opt/kafka/bin; LogFile=D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:08.551 [INFO ] [02-produce-messages] Log file: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:08.832 [INFO ] [02-produce-messages] Container 'broker' is running and healthy
+2026-09-27 16:22:09.008 [INFO ] [02-produce-messages] Kafka CLI directory: /opt/kafka/bin
+2026-09-27 16:22:09.084 [STEP ] [02-produce-messages] docker exec broker /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:29092 --list
+2026-09-27 16:22:11.155 [INFO ] [02-produce-messages] __consumer_offsets
+2026-09-27 16:22:11.157 [INFO ] [02-produce-messages] foo
+2026-09-27 16:22:11.158 [INFO ] [02-produce-messages] test
+2026-09-27 16:22:11.160 [INFO ] [02-produce-messages] test-topic
+2026-09-27 16:22:11.205 [INFO ] [02-produce-messages] RunId: 20260927162201
+2026-09-27 16:22:11.207 [STEP ] [02-produce-messages] Producing 5 message(s) to topic 'test':
+2026-09-27 16:22:11.209 [INFO ] [02-produce-messages] payload> {"id":1,"runId":"20260927162201","event":"user_login","source":"ps-script","seq":1,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:11.210 [INFO ] [02-produce-messages] payload> {"id":2,"runId":"20260927162201","event":"user_logout","source":"ps-script","seq":2,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:11.211 [INFO ] [02-produce-messages] payload> {"id":3,"runId":"20260927162201","event":"page_view","source":"ps-script","seq":3,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:11.212 [INFO ] [02-produce-messages] payload> {"id":4,"runId":"20260927162201","event":"purchase","source":"ps-script","seq":4,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:11.214 [INFO ] [02-produce-messages] payload> {"id":5,"runId":"20260927162201","event":"search","source":"ps-script","seq":5,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:11.216 [STEP ] [02-produce-messages] docker exec -i broker /opt/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:29092 --topic test
+2026-09-27 16:22:13.412 [INFO ] [02-produce-messages] Sent 5 message(s) to topic 'test' (runId 20260927162201)
+2026-09-27 16:22:13.413 [INFO ] [02-produce-messages] DONE: produce step completed successfully
+2026-09-27 16:22:13.813 [INFO ] [run-all] Step '02-produce-messages' finished with exit code 0
+2026-09-27 16:22:13.815 [STEP ] [run-all] === Step 03-consume-messages ===
+2026-09-27 16:22:14.466 [INFO ] [03-consume-messages] === 03-consume-messages started (PID 21704, PowerShell 7.6.6) ===
+2026-09-27 16:22:14.477 [INFO ] [03-consume-messages] Parameters: Topic=test; MaxMessages=505; TimeoutMs=15000; RunId=20260927162201; FromBeginning=True; ContainerName=broker; BootstrapServer=localhost:29092; KafkaBin=/opt/kafka/bin; LogFile=D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:14.479 [INFO ] [03-consume-messages] Log file: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
+2026-09-27 16:22:14.754 [INFO ] [03-consume-messages] Container 'broker' is running and healthy
+2026-09-27 16:22:14.926 [INFO ] [03-consume-messages] Kafka CLI directory: /opt/kafka/bin
+2026-09-27 16:22:14.936 [STEP ] [03-consume-messages] docker exec broker /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:29092 --topic test --from-beginning --max-messages 505 --timeout-ms 15000 --property print.timestamp=true --property print.partition=true --property print.offset=true
+2026-09-27 16:22:32.316 [INFO ] [03-consume-messages] Option --property is deprecated and will be removed in a future version. Use --formatter-property instead.
+2026-09-27 16:22:32.318 [INFO ] [03-consume-messages] The consumer rebalance protocol (KIP-848) is production-ready! Set group.protocol=consumer to try it out. See https://kafka.apache.org/documentation/#consumer_rebalance_protocol
+2026-09-27 16:22:32.320 [INFO ] [03-consume-messages] CreateTime:1790513334313	Partition:1	Offset:0	{"id":1,"runId":"20260927154840","event":"user_login","source":"ps-script","seq":1,"ts":"2026-09-27T12:48:52Z"}
+2026-09-27 16:22:32.322 [INFO ] [03-consume-messages] CreateTime:1790513334330	Partition:1	Offset:1	{"id":2,"runId":"20260927154840","event":"user_logout","source":"ps-script","seq":2,"ts":"2026-09-27T12:48:52Z"}
+2026-09-27 16:22:32.324 [INFO ] [03-consume-messages] CreateTime:1790513334330	Partition:1	Offset:2	{"id":3,"runId":"20260927154840","event":"page_view","source":"ps-script","seq":3,"ts":"2026-09-27T12:48:52Z"}
+2026-09-27 16:22:32.327 [INFO ] [03-consume-messages] CreateTime:1790513334330	Partition:1	Offset:3	{"id":4,"runId":"20260927154840","event":"purchase","source":"ps-script","seq":4,"ts":"2026-09-27T12:48:52Z"}
+2026-09-27 16:22:32.330 [INFO ] [03-consume-messages] CreateTime:1790513334330	Partition:1	Offset:4	{"id":5,"runId":"20260927154840","event":"search","source":"ps-script","seq":5,"ts":"2026-09-27T12:48:52Z"}
+2026-09-27 16:22:32.351 [INFO ] [03-consume-messages] CreateTime:1790515332983	Partition:1	Offset:5	{"id":1,"runId":"20260927162201","event":"user_login","source":"ps-script","seq":1,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:32.353 [INFO ] [03-consume-messages] CreateTime:1790515332995	Partition:1	Offset:6	{"id":2,"runId":"20260927162201","event":"user_logout","source":"ps-script","seq":2,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:32.355 [INFO ] [03-consume-messages] CreateTime:1790515332995	Partition:1	Offset:7	{"id":3,"runId":"20260927162201","event":"page_view","source":"ps-script","seq":3,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:32.357 [INFO ] [03-consume-messages] CreateTime:1790515332995	Partition:1	Offset:8	{"id":4,"runId":"20260927162201","event":"purchase","source":"ps-script","seq":4,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:32.358 [INFO ] [03-consume-messages] CreateTime:1790515332995	Partition:1	Offset:9	{"id":5,"runId":"20260927162201","event":"search","source":"ps-script","seq":5,"ts":"2026-09-27T13:22:11Z"}
+2026-09-27 16:22:32.360 [INFO ] [03-consume-messages] [2026-09-27 13:22:31,811] ERROR Error processing message, terminating consumer process:  (org.apache.kafka.tools.consumer.ConsoleConsumer)
+2026-09-27 16:22:32.362 [INFO ] [03-consume-messages] org.apache.kafka.common.errors.TimeoutException
+2026-09-27 16:22:32.364 [INFO ] [03-consume-messages] Processed a total of 10 messages
+2026-09-27 16:22:32.384 [INFO ] [03-consume-messages] Total messages read: 10; messages of current run (runId 20260927162201): 5
+2026-09-27 16:22:32.388 [WARN ] [03-consume-messages] Consumer hit the timeout (exit code 0, TimeoutException: True); summary line is present, treating the step as successful
+2026-09-27 16:22:32.390 [INFO ] [03-consume-messages] DONE: consume step completed successfully
+2026-09-27 16:22:32.423 [INFO ] [run-all] Step '03-consume-messages' finished with exit code 0
+2026-09-27 16:22:32.452 [INFO ] [run-all] SUCCESS: topic 'test', produced 5 message(s), runId 20260927162201; elapsed 30,4s; log file: D:\OTUS\Data Engineer\hw06\scripts\logs\run-all-20260927-162201.log
