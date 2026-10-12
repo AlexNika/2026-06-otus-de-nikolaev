@@ -1,0 +1,17 @@
+.git
+.gitignore
+.dockerignore
+.idea
+**/.idea
+.kilo
+**/__pycache__
+**/*.pyc
+.venv
+**/.venv
+pyspark_solution/.venv
+data
+**/target
+docker-compose.yaml
+spark-custom.conf
+rest-submit.json
+*.md

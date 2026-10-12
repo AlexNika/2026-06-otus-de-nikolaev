@@ -1,0 +1,195 @@
+x-app-image: &app-image
+  image: boston-crimes-mart:spark-4.2.0-java21-python3
+  build:
+    context: .
+    dockerfile: Dockerfile
+
+services:
+  master:
+    <<: *app-image
+    container_name: spark-master
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.master.Master
+      - -h
+      - master
+      - -p
+      - "7077"
+      - --webui-port
+      - "8080"
+    environment:
+      SPARK_PUBLIC_DNS: localhost
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+      - "6066:6066"
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://master:6066/v1/submissions/readyz >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+    restart: unless-stopped
+
+  worker-1:
+    <<: *app-image
+    container_name: spark-worker-1
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://master:7077
+      - --webui-port
+      - "8081"
+      - -c
+      - "2"
+      - -m
+      - 2g
+    environment:
+      SPARK_PUBLIC_DNS: localhost
+    depends_on:
+      master:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://worker-1:8081/ >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+    restart: unless-stopped
+
+  worker-2:
+    <<: *app-image
+    container_name: spark-worker-2
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://master:7077
+      - --webui-port
+      - "8082"
+      - -c
+      - "2"
+      - -m
+      - 2g
+    environment:
+      SPARK_PUBLIC_DNS: localhost
+    depends_on:
+      master:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://worker-2:8082/ >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+    restart: unless-stopped
+
+  submit-pyspark:
+    <<: *app-image
+    profiles: ["submit"]
+    depends_on:
+      master:
+        condition: service_healthy
+      worker-1:
+        condition: service_healthy
+      worker-2:
+        condition: service_healthy
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - spark://master:7077
+      - --deploy-mode
+      - client
+      - --driver-memory
+      - 512m
+      - --executor-memory
+      - 512m
+      - --executor-cores
+      - "1"
+      - --total-executor-cores
+      - "2"
+      - /opt/spark/app/boston_crimes_mart_app.py
+      - --crimes_path
+      - /opt/spark/data/crime.csv
+      - --codes_path
+      - /opt/spark/data/offense_codes.csv
+      - --output_path
+      - /opt/spark/data/output/pyspark
+    restart: "no"
+
+  submit-java:
+    <<: *app-image
+    profiles: ["submit"]
+    depends_on:
+      master:
+        condition: service_healthy
+      worker-1:
+        condition: service_healthy
+      worker-2:
+        condition: service_healthy
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    command:
+      - /opt/spark/bin/spark-submit
+      - --class
+      - ru.otus.de.hw08.BostonCrimesMartApp
+      - --master
+      - spark://master:7077
+      - --deploy-mode
+      - client
+      - --driver-memory
+      - 512m
+      - --executor-memory
+      - 512m
+      - --executor-cores
+      - "1"
+      - --total-executor-cores
+      - "2"
+      - /opt/spark/app/boston-crimes-mart-1.0.0.jar
+      - /opt/spark/data/crime.csv
+      - /opt/spark/data/offense_codes.csv
+      - /opt/spark/data/output/java
+    restart: "no"
+
+  compare:
+    <<: *app-image
+    profiles: ["submit"]
+    networks: ["sparknet"]
+    volumes:
+      - ./spark-custom.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/opt/spark/data
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - local[2]
+      - /opt/spark/app/tools/compare_marts.py
+      - --java_path
+      - /opt/spark/data/output/java
+      - --pyspark_path
+      - /opt/spark/data/output/pyspark
+    restart: "no"
+
+networks:
+  sparknet:
+    name: sparknet
